@@ -1,9 +1,24 @@
-import 'package:advice_app/presentation/pages/advice_page.dart';
-import 'package:advice_app/presentation/pages/coffee_page.dart';
+import 'package:advice_app/advice/presentation/bloc/advice_bloc.dart';
+import 'package:advice_app/coffee/presentation/bloc/coffee_bloc.dart';
+import 'package:advice_app/weather/presentation/bloc/weather_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'advice/presentation/pages/advice_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider<AdviceBloc>(
+      create: (context) => AdviceBloc(),
+    ),
+    BlocProvider<WeatherBloc>(
+      create: (context) => WeatherBloc(),
+    ),
+    BlocProvider<CoffeeBloc>(
+      create: (context) => CoffeeBloc(),
+    ),
+  ],
+  child: const  MyApp()));
 }
 
 class MyApp extends StatelessWidget {

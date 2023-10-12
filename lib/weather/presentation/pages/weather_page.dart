@@ -1,4 +1,6 @@
+import 'package:advice_app/weather/presentation/bloc/weather_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/datasource/weather_ds.dart';
 import '../../data/model/weather_model.dart';
@@ -30,7 +32,9 @@ class _WeatherPageState extends State<WeatherPage> {
           style: TextStyle(fontSize: 24, color: Colors.white),
         ),
       ),
-      body: Padding(
+      body: BlocBuilder<WeatherBloc, WeatherState>(
+  builder: (context, state) {
+    return Padding(
         padding: const EdgeInsets.all(16),
         child: Container(
           width: double.infinity,
@@ -38,21 +42,21 @@ class _WeatherPageState extends State<WeatherPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if(weatherModel == null && !loading) const  Text(
+                if(state is WeatherInitial) const  Text(
                   'Start Searching . . .',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if(loading) const CircularProgressIndicator(),
-                if(weatherModel!=null && !loading)
+                if(state is WeatherLoadingState) const CircularProgressIndicator(),
+                if(state is WeatherLoadedState)
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
                         Text(
-                         'Temperature is : ${weatherModel!.temperature}' ,
+                         'Temperature is : ${state.weatherModel.temperature}' ,
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w400,
@@ -62,13 +66,13 @@ class _WeatherPageState extends State<WeatherPage> {
                           height: 20,
                         ),
                         Text(
-                            'Wind is : ${weatherModel!.wind} ',
+                            'Wind is : ${state.weatherModel.wind} ',
                             style: const TextStyle(fontSize: 24,fontWeight: FontWeight.w400)),
                         const SizedBox(
                           height: 20,
                         ),
                         Text(
-                            'Description is :  ${weatherModel!.description}' ,
+                            'Description is :  ${state.weatherModel.description}' ,
                             style: const TextStyle(fontSize: 24,fontWeight: FontWeight.w400)),
                       ],
                     ),
@@ -105,13 +109,7 @@ class _WeatherPageState extends State<WeatherPage> {
                           ElevatedButton(
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
-                                setState(() {
-                                  loading=true ;
-                                });
-                                weatherModel =  await WeatherImp().getWeather(name.text) ;
-                                setState(() {
-                                  loading=false;
-                                });
+                               context.read<WeatherBloc>().add(GetWeatherByCity(city: name.text));
                               }
                             },
                             style: ElevatedButton.styleFrom(
@@ -132,7 +130,9 @@ class _WeatherPageState extends State<WeatherPage> {
             ),
           ),
         ),
-      ),
+      );
+  },
+),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
-import '../model/advice_modle.dart';
+import '../model/advice_model.dart';
 
 abstract class AdviceRemoteDS {
   ///
