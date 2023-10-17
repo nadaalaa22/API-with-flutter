@@ -1,13 +1,12 @@
 import 'package:advice_app/advice/presentation/bloc/advice_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../coffee/presentation/pages/coffee_page.dart';
-import '../../data/datasource/advice_ds.dart';
-import '../../data/model/advice_model.dart';
 
 class AdvicePage extends StatelessWidget {
-  AdvicePage({Key? key}) : super(key: key);
+  const AdvicePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class AdvicePage extends StatelessWidget {
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.all(16),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -40,10 +39,10 @@ class AdvicePage extends StatelessWidget {
                   if (state is AdviceLoadedState)
                     Column(
                       children: [
-                        const Padding(
+                         Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Text(
-                            'The advice is .. ',
+                            tr("Advice"),
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
@@ -65,7 +64,7 @@ class AdvicePage extends StatelessWidget {
                     height: 80,
                   ),
                   ElevatedButton(
-                    onPressed: () async {
+                    onPressed: ()  {
                       context.read<AdviceBloc>().add(GetRandomAdviceEvent());
                     },
                     style: ElevatedButton.styleFrom(
@@ -74,7 +73,7 @@ class AdvicePage extends StatelessWidget {
                         // Adjust the border radius as needed
                       ),
                     ),
-                    child: const Text('Random Advice '),
+                    child:  Text(tr("RandomAdvice")),
                   ),
                 ],
               ),
@@ -87,7 +86,7 @@ class AdvicePage extends StatelessWidget {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => CoffeePage()));
         },
-        child: Icon(Icons.arrow_forward),
+        child: const Icon(Icons.arrow_forward),
       ),
     );
   }
